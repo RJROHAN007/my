@@ -64,6 +64,7 @@ if TORCH_AVAILABLE:
     try:
         if os.path.exists(MODEL_PATH):
             model = CNNBiLSTM()
+            with torch.serialization.add_safe_globals([CNNBiLSTM]):
             checkpoint = torch.load(MODEL_PATH, map_location="cpu")
 
             if isinstance(checkpoint, dict) and 'state_dict' in checkpoint:
@@ -430,3 +431,4 @@ if __name__ == "__main__":
     import uvicorn, os
     port = int(os.environ.get("PORT", 8000))  # Use host PORT if provided
     uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
+
