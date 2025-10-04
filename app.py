@@ -63,7 +63,8 @@ loaded_model = None
 if TORCH_AVAILABLE and os.path.exists(MODEL_PATH):
     try:
         model = CNNBiLSTM()
-        checkpoint = torch.load(MODEL_PATH, map_location="cpu")
+        with torch.serialization.add_safe_globals([CNNBiLSTM]):
+            checkpoint = torch.load(MODEL_PATH, map_location="cpu")
         if isinstance(checkpoint, dict) and 'state_dict' in checkpoint:
             model.load_state_dict(checkpoint['state_dict'])
         elif isinstance(checkpoint, nn.Module):
@@ -242,3 +243,4 @@ async def health_check():
         "active_connections": len(manager.active_connections),
         "model_available": loaded_model is not None
     }
+
