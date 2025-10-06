@@ -68,6 +68,7 @@ loaded_model = None
 if TORCH_AVAILABLE:
     try:
         if os.path.exists(MODEL_PATH):
+            torch.serialization.add_safe_class(CNNBiLSTM)
             model = CNNBiLSTM()
             checkpoint = torch.load(MODEL_PATH, map_location="cpu")
 
@@ -524,3 +525,4 @@ async def health_check():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+
